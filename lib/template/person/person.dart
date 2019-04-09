@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 
 class QMPersonCenter extends StatelessWidget {
+  final String bgImage;
+  QMPersonCenter({
+    this.bgImage
+  });
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -20,7 +24,8 @@ class QMPersonCenter extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
+  final String bgImage;
+  MainPage({Key key,this.bgImage='images/birds.jpg'}) : super(key: key);
 
   @override
   _MainPageState createState() => new _MainPageState();
@@ -81,7 +86,7 @@ class _MainPageState extends State<MainPage> {
       child: new ClipPath(
         clipper: new DialogonalClipper(),
         child: new Image.asset(
-          'images/birds.jpg',
+          widget.bgImage,//'images/birds.jpg',
           fit: BoxFit.cover,
           height: _imageHeight,
           colorBlendMode: BlendMode.srcOver,
