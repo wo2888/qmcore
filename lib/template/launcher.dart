@@ -8,13 +8,15 @@ class QMSplashScreen extends StatefulWidget {
   final String description; // 应用描述
   final Color background;   // 欢迎页面背景色
   final IconData icon;      // 图标
+  final VoidCallback callback;  // 初始化后的回调
 
   QMSplashScreen(
      {
       this.appName = "Fusion3.0",
       this.description = "Fustion3.0 Platform \n  For Everyone", 
       this.background = Colors.blueAccent, 
-      this.icon = Icons.shopping_cart
+      this.icon = Icons.shopping_cart,
+      this.callback
     }
   );
 
@@ -28,7 +30,7 @@ class _QMSplashScreenState extends State<QMSplashScreen> {
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds:5),() => print("Splash DOne!"));
+    Timer(Duration(seconds:5),widget.callback);
   }
 
   @override
