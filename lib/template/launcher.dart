@@ -3,6 +3,21 @@ import 'dart:async';
 
 
 class QMSplashScreen extends StatefulWidget {
+
+  final String appName;     // 应用名
+  final String description; // 应用描述
+  final Color background;   // 欢迎页面背景色
+  final IconData icon;      // 图标
+
+  QMSplashScreen(
+     {
+      this.appName = "Fusion3.0",
+      this.description = "Fustion3.0 Platform \n  For Everyone", 
+      this.background = Colors.blueAccent, 
+      this.icon = Icons.shopping_cart
+    }
+  );
+
   @override
   _QMSplashScreenState createState() => _QMSplashScreenState();
 
@@ -38,8 +53,8 @@ class _QMSplashScreenState extends State<QMSplashScreen> {
                         backgroundColor: Colors.white,
                         radius: 50.0,
                         child: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.blueAccent,
+                          widget.icon ?? Icons.shopping_cart,
+                          color: widget.background,
                           size: 60.0,
                         ),
                       ),
@@ -47,7 +62,7 @@ class _QMSplashScreenState extends State<QMSplashScreen> {
                         padding:EdgeInsets.only(top: 10.0) ,
                         ),
                         Text(
-                          "Fusion3.0",
+                          widget.appName,
                           style:TextStyle(
                             color:Colors.white, 
                             fontSize:24.0,
@@ -66,7 +81,7 @@ class _QMSplashScreenState extends State<QMSplashScreen> {
                       CircularProgressIndicator(),
                       Padding(padding: EdgeInsets.only(top:20.0),
                       ),
-                      Text("Fustion3.0 Platform \n  For Everyone", 
+                      Text(widget.description, 
                       style: TextStyle(
                         color: Colors.white, 
                       fontSize: 18.0,

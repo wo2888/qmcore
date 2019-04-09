@@ -1,7 +1,7 @@
-name: qmcore
-description: A new Flutter package project.
-version: 0.0.1
-author: ZSX <wo2888@126.com>
+name: fusion
+description: A new Fusion Mobile3.0 package project.
+version: 3.0.1
+author: Zhang Shanxu <wo2888@126.com>
 homepage: https://github.com/wo2888
 
 environment:
