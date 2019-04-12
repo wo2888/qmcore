@@ -1,3 +1,5 @@
+
+
 import './animated_fab.dart';
 import './diagonal_clipper.dart';
 import './initial_list.dart';
@@ -8,8 +10,14 @@ import 'package:flutter/material.dart';
 
 class QMPersonCenter extends StatelessWidget {
   final String bgImage;
+  final QMPerson user;
+  final QMPersonDescription desc;
+  final Function(BuildContext,QMPersonItem) onTap;
   QMPersonCenter({
-    this.bgImage
+    this.bgImage,
+    this.desc,
+    this.user,
+    this.onTap
   });
   @override
   Widget build(BuildContext context) {
@@ -18,30 +26,35 @@ class QMPersonCenter extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MainPage(),
+      home: new _QMPersonCenter(bgImage: bgImage,desc:desc,user:user,onTap: onTap,),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
+class _QMPersonCenter extends StatefulWidget {
   final String bgImage;
-  MainPage({Key key,this.bgImage='images/birds.jpg'}) : super(key: key);
+  final QMPerson user;
+  final QMPersonDescription desc;
+  final void Function(BuildContext,QMPersonItem) onTap;
+  _QMPersonCenter({Key key,this.bgImage,this.desc,this.user,this.onTap}) : super(key: key);
 
   @override
-  _MainPageState createState() => new _MainPageState();
+  _MainPageState createState() => new _MainPageState(onTap: this.onTap);
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<_QMPersonCenter> {
+  _MainPageState({this.onTap});
   final GlobalKey<AnimatedListState> _listKey =
       new GlobalKey<AnimatedListState>();
   final double _imageHeight = 256.0;
+  final void Function(BuildContext,QMPersonItem) onTap;
   ListModel listModel;
   bool showOnlyCompleted = false;
 
   @override
   void initState() {
     super.initState();
-    listModel = new ListModel(_listKey, tasks);
+    listModel = new ListModel(_listKey, widget.user.list ?? tasks,this.onTap);
   }
 
   @override
@@ -71,11 +84,12 @@ class _MainPageState extends State<MainPage> {
 
   void _changeFilterState() {
     showOnlyCompleted = !showOnlyCompleted;
-    tasks.where((task) => !task.completed).forEach((task) {
+    List<QMPersonItem> list = widget.user.list ?? tasks;
+    list.where((task) => !task.completed).forEach((task) {
       if (showOnlyCompleted) {
         listModel.removeAt(listModel.indexOf(task));
       } else {
-        listModel.insert(tasks.indexOf(task), task);
+        listModel.insert(list.indexOf(task), task);
       }
     });
   }
@@ -86,7 +100,7 @@ class _MainPageState extends State<MainPage> {
       child: new ClipPath(
         clipper: new DialogonalClipper(),
         child: new Image.asset(
-          widget.bgImage,//'images/birds.jpg',
+          widget.bgImage ?? 'assets/images/common_user_background.png',
           fit: BoxFit.cover,
           height: _imageHeight,
           colorBlendMode: BlendMode.srcOver,
@@ -106,7 +120,7 @@ class _MainPageState extends State<MainPage> {
             child: new Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: new Text(
-                "Timeline",
+                "Fusion Platform",
                 style: new TextStyle(
                     fontSize: 20.0,
                     color: Colors.white,
@@ -128,7 +142,7 @@ class _MainPageState extends State<MainPage> {
           new CircleAvatar(
             minRadius: 28.0,
             maxRadius: 28.0,
-            backgroundImage: new AssetImage('images/avatar.jpg'),
+            backgroundImage: new AssetImage(widget.user.photo ?? 'assets/images/avatar.png'),
           ),
           new Padding(
             padding: const EdgeInsets.only(left: 16.0),
@@ -137,14 +151,14 @@ class _MainPageState extends State<MainPage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new Text(
-                  'Ryan Barnes',
+                  widget.user.name ?? '张善旭',
                   style: new TextStyle(
                       fontSize: 26.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w400),
                 ),
                 new Text(
-                  'Product designer',
+                  widget.user.desc ?? '高级系统架构员',
                   style: new TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,
@@ -174,12 +188,14 @@ class _MainPageState extends State<MainPage> {
   Widget _buildTasksList() {
     return new Expanded(
       child: new AnimatedList(
-        initialItemCount: tasks.length,
+        initialItemCount: widget.user.list.length ?? tasks.length,
         key: _listKey,
         itemBuilder: (context, index, animation) {
           return new TaskRow(
             task: listModel[index],
             animation: animation,
+            onTap:onTap,
+
           );
         },
       ),
@@ -193,11 +209,11 @@ class _MainPageState extends State<MainPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Text(
-            'My Tasks',
+            widget.desc!=null ? widget.desc.title:'Fusion 3.0平台移动框架',
             style: new TextStyle(fontSize: 34.0),
           ),
           new Text(
-            'FEBRUARY 8, 2015',
+            widget.desc!=null ? widget.desc.content:'Fusion 3.0移动端,新平台,新体验',
             style: new TextStyle(color: Colors.grey, fontSize: 12.0),
           ),
         ],
@@ -217,3 +233,36 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+
+class QMPersonDescription{
+  String title;
+  String content;
+  QMPersonDescription({
+    this.title,
+    this.content
+  });
+}
+
+class QMPerson {
+  String name;
+  String desc;
+  String photo;
+  List<QMPersonItem> list;
+
+  QMPerson(
+    {@required this.name,this.desc,this.photo,this.list}
+  );
+}
+
+class QMPersonItem {
+  final String id;
+  final String name;
+  final String category;
+  final String time;
+  final Color color;
+  final bool completed;
+
+  QMPersonItem({@required this.id,this.name, this.category, this.time, this.color, this.completed});
+}
+  

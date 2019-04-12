@@ -1,33 +1,33 @@
-import './task.dart';
+import './person.dart';
 import 'package:flutter/material.dart';
 
 
-List<Task> tasks = [
-  new Task(
+List<QMPersonItem> tasks = [
+  new QMPersonItem(
       name: "Catch up with Brian",
       category: "Mobile Project",
       time: "5pm",
       color: Colors.orange,
       completed: false),
-  new Task(
+  new QMPersonItem(
       name: "Make new icons",
       category: "Web App",
       time: "3pm",
       color: Colors.cyan,
       completed: true),
-  new Task(
+  new QMPersonItem(
       name: "Design explorations",
       category: "Company Website",
       time: "2pm",
       color: Colors.pink,
       completed: false),
-  new Task(
+  new QMPersonItem(
       name: "Lunch with Mary",
       category: "Grill House",
       time: "12pm",
       color: Colors.cyan,
       completed: true),
-  new Task(
+  new QMPersonItem(
       name: "Teem Meeting",
       category: "Hangouts",
       time: "10am",
